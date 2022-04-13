@@ -28,13 +28,12 @@ function listarPorId(id) {
 
 function cadastrar(pet) {
     pet.id = data.length+1;
-    data.push(pet);
     
     if(pet.nome === undefined){
         return{
             erro: true,
             mensagem: "Campo 'nome' é obrigatório!"
-        };
+        };   
     }
     if(pet.idade === undefined){
         return{
@@ -60,24 +59,68 @@ function cadastrar(pet) {
             mensagem: "Campo 'idade' deve ser maior ou igual a zero!"
         };
     }
-    if(pet.sexo == "M" || "F"){
+    if(pet.sexo != "M" && pet.sexo != "F"){
         return{
             erro: true,
             mensagem: "Campo 'sexo' deve ser 'M' ou 'F'!"
         };
     }
+    data.push(pet)
+
     return pet;
 }
 
 function editarPorId(id, pet) {
     const index = data.findIndex(pet => pet.id === id);
+    
     if(index === -1)
         return {erro: true, mensagem: "Pet não encontrado!"}
+    
+    if(pet.nome != undefined){
+        data[index].nome = pet.nome;
+    }
+
+    if(pet.idade != undefined){
+        if(pet.idade < 0){
+            return{
+                erro: true,
+                mensagem: "Campo 'idade' deve ser maior ou igual a zero!"
+            };
+        }
+        data[index].idade = pet.idade;
+    }
+
+    if(pet.sexo != undefined){
+        if(pet.sexo !== "M" && pet.sexo !== "F"){
+            return{
+                erro: true,
+                mensagem: "Campo 'sexo' deve ser 'M' ou 'F'!"
+            };
+        }
+        data[index].sexo = pet.sexo;  
+    }
+
+
+    if(pet.especie != undefined){
+        data[index].especie = pet.especie;
+    }
+    
+    return data[index];
 }
+
+   
 
 function deletarPorId(id) {
     const index = data.findIndex(pet => pet.id === id);
+    
     if(index === -1) return {erro: true, mensagem: "Pet não encontrado!"}
+    
+    data.splice(index, 1)
+    
+   return{
+    erro: false,
+    mensagem: "Pet deletado com sucesso!"
+   }; 
 }
 
 module.exports = {
